@@ -1,0 +1,170 @@
+/* ========================================
+   SERVICES PAGE STYLES
+   ======================================== */
+
+.services-page-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.service-page-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--dark-gray-2);
+    transition: all var(--transition-normal);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.service-page-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.spc-image {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+.spc-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+}
+
+.service-page-card:hover .spc-image img {
+    transform: scale(1.1);
+}
+
+.spc-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26, 26, 26, 1) 0%, transparent 60%);
+}
+
+.spc-content {
+    padding: 24px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: -32px;
+    position: relative;
+    z-index: 1;
+}
+
+.spc-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--accent-red);
+    background: var(--accent-red-subtle);
+    border-radius: 12px;
+    margin-bottom: 16px;
+    transition: all var(--transition-normal);
+}
+
+.service-page-card:hover .spc-icon {
+    background: var(--accent-red);
+    color: var(--white);
+}
+
+.spc-title {
+    font-family: var(--font-subheading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.spc-desc {
+    font-size: 0.88rem;
+    color: var(--light-gray);
+    line-height: 1.7;
+    flex: 1;
+}
+
+.spc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-red);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: gap var(--transition-fast);
+}
+
+.spc-link:hover {
+    gap: 12px;
+}
+
+/* Why Choose Us */
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+}
+
+.why-card {
+    padding: 32px 24px;
+    text-align: center;
+}
+
+.why-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    font-size: 1.4rem;
+    color: var(--accent-red);
+    background: var(--accent-red-subtle);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+}
+
+.why-card:hover .why-icon {
+    background: var(--accent-red);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.why-card h3 {
+    font-family: var(--font-subheading);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.why-card p {
+    font-size: 0.88rem;
+    color: var(--light-gray);
+    line-height: 1.6;
+}
+
+@media (max-width: 1024px) {
+    .services-page-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .why-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .services-page-grid,
+    .why-grid {
+        grid-template-columns: 1fr;
+    }
+}
