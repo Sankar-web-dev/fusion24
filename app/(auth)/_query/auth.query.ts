@@ -6,20 +6,9 @@ type LoginParams = {
   password: string;
 };
 
-type SignupParams = {
-  email: string;
-  password: string;
-};
-
 export const useLogin = () => {
   return useMutation({
     mutationFn: ({ email, password }: LoginParams) => authService.logInWithEmailAndPassword(email, password),
-  });
-};
-
-export const useSignup = () => {
-  return useMutation({
-    mutationFn: ({ email, password }: SignupParams) => authService.signUpWithEmailAndPassword(email, password),
   });
 };
 
