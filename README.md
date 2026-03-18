@@ -1,3 +1,98 @@
+# FUSION 24 — Premium Fitness Website
+
+High-end gym brand website built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Framer Motion**, **Supabase (Auth + DB)**, **Lucide Icons**, and **Shadcn UI-style components**.
+
+## Tech Stack
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+- Supabase (`@supabase/ssr`, `@supabase/supabase-js`)
+- Lucide React
+- Shadcn UI component patterns in `components/ui`
+
+## Folder Structure
+
+```
+app/
+  admin/
+  contact/
+  dashboard/
+  gallery/
+  login/
+  memberships/
+  trainers/
+components/
+  auth/
+  layout/
+  motion/
+  ui/
+hooks/
+lib/
+public/
+  images/
+styles/
+supabase/
+```
+
+## Setup
+
+### 1) Install
+
+```bash
+npm install
+```
+
+### 2) Supabase
+
+Create a project in Supabase, then in the SQL editor run:
+
+- `supabase/schema.sql`
+
+Then create a local env file:
+
+```bash
+copy .env.example .env.local
+```
+
+Fill in:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+#### Make a user admin
+
+After signing up once, promote your account in Supabase SQL:
+
+```sql
+update public.profiles set role = 'admin' where id = 'YOUR_USER_UUID';
+```
+
+### 3) Run
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`.
+
+## Pages
+
+- `/` Home
+- `/memberships` Membership plans + comparison
+- `/trainers` Trainer profiles
+- `/gallery` Responsive gallery grid
+- `/contact` Contact form (demo UI)
+- `/login` Supabase login/signup
+- `/dashboard` Member dashboard (protected)
+- `/admin` Admin dashboard (protected + role-gated)
+
+## Notes
+
+- Protected routes are enforced in `middleware.ts`.
+- Admin access is determined by `profiles.role = 'admin'`.
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
