@@ -61,16 +61,17 @@ export interface MembershipPlans {
   created_at: Date | null;
 }
 
-export interface Payments {
-  id: string;
-  member_id: string;
-  membership_plan_id: string;
-  amount: number;
-  billing_start: Date;
-  billing_end: Date;
-  status: 'paid' | 'pending';
-  paid_date: Date | null;
-  created_at: Date | null;
+  export interface Payments {
+    id: string;
+    member_id: string;
+    membership_plan_id: string;
+    amount: number;
+    paid_amount: number;
+    billing_start: Date;
+    billing_end: Date;
+    status: 'paid' | 'partial' | 'unpaid';
+    paid_date: Date | null;
+    created_at: Date | null;
 }
 
 export interface Trainers {
