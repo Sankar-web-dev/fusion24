@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function AdminLayout({
   children,
 }: {
@@ -10,7 +12,7 @@ export default function AdminLayout({
         <h2 className="text-xl font-bold text-orange-500 mb-8">Fusion24 Admin</h2>
         <nav className="flex flex-col gap-4 text-sm text-slate-300">
           <div className="hover:text-orange-400 cursor-pointer">Dashboard</div>
-          <div className="hover:text-orange-400 cursor-pointer">Memberships</div>
+          <Link href="/admin/memberships" className="hover:text-orange-400 cursor-pointer">Memberships</Link>
           <div className="hover:text-orange-400 cursor-pointer">Members</div>
           <div className="hover:text-orange-400 cursor-pointer">Trainers</div>
           <div className="hover:text-orange-400 cursor-pointer">Payments</div>
