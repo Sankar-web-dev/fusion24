@@ -10,6 +10,9 @@ import { toast } from 'sonner';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Dumbbell, User } from 'lucide-react';
+import { Outfit } from 'next/font/google';
+
+const outfit = Outfit({ subsets: ['latin'] });
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -20,9 +23,17 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     loginMutation.mutate({ email, password }, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success('Welcome back!');
-        router.push('/');
+        const role = data?.user?.user_metadata?.role;
+        if (role === 'admin') {
+          router.push('/admin');
+        } else if (role === 'member') {
+          router.push('/member');
+        } else {
+          // Fallback or unassigned role
+          router.push('/');
+        }
       },
       onError: (error) => {
         toast.error(`Login failed: ${error.message}`);
@@ -31,7 +42,7 @@ export default function Login() {
   };
 
   return (
-    <div className="h-screen w-full relative flex items-center justify-center overflow-hidden bg-[#0A1118]">
+    <div className={`h-screen w-full relative flex items-center justify-center overflow-hidden bg-[#0A1118] ${outfit.className}`}>
       {/* Full-screen Background Image */}
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/60 z-10" />
@@ -107,12 +118,7 @@ export default function Login() {
           </div>
         </form>
 
-        <p className="mt-8 text-center text-slate-300 text-sm">
-          Don't have an account?{' '}
-          <Link href="/signup" className="text-orange-400 font-semibold hover:text-orange-300 transition-colors">
-            Sign up
-          </Link>
-        </p>
+
       </div>
     </div>
   );
