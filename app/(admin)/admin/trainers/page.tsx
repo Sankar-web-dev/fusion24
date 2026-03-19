@@ -43,21 +43,21 @@ export default function TrainersPage() {
 
   return (
     <div className={`min-h-screen bg-[#0A1118] ${outfit.className}`}>
-      <div className="max-w-7xl mx-auto p-6 sm:p-8">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-4xl font-extrabold text-white tracking-tight">
+        <div className="mb-6 sm:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
               Trainers
             </h1>
-            <Link href="/admin/trainers/create">
-              <Button className="h-11 px-6 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.5)] border-0">
+            <Link href="/admin/trainers/create" className="w-full sm:w-auto">
+              <Button className="w-full sm:w-auto h-11 px-6 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.5)] border-0">
                 <Plus className="mr-2 h-5 w-5" />
                 Add Trainer
               </Button>
             </Link>
           </div>
-          <p className="text-slate-400">Manage your gym's trainers and coaching staff</p>
+          <p className="text-sm sm:text-base text-slate-400">Manage your gym's trainers and coaching staff</p>
         </div>
 
         {/* Content */}

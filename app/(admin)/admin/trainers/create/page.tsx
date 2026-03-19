@@ -32,27 +32,27 @@ export default function CreateTrainerPage() {
 
   return (
     <div className={`min-h-screen bg-[#0A1118] ${outfit.className}`}>
-      <div className="max-w-3xl mx-auto p-6 sm:p-8">
+      <div className="max-w-3xl mx-auto p-4 sm:p-6 md:p-8">
         {/* Back Button */}
         <Link
           href="/admin/trainers"
-          className="inline-flex items-center gap-2 text-slate-400 hover:text-orange-400 transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm sm:text-base text-slate-400 hover:text-orange-400 transition-colors mb-6"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back to Trainers</span>
         </Link>
 
         {/* Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center shadow-[0_0_30px_rgba(249,115,22,0.4)]">
-              <UserPlus className="text-white w-6 h-6" strokeWidth={2.5} />
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center gap-3 sm:gap-4 mb-2">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-xl flex items-center justify-center shadow-[0_0_30px_rgba(249,115,22,0.4)] shrink-0">
+              <UserPlus className="text-white w-5 h-5 sm:w-6 sm:h-6" strokeWidth={2.5} />
             </div>
-            <h1 className="text-4xl font-extrabold text-white tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
               Add New Trainer
             </h1>
           </div>
-          <p className="text-slate-400 ml-15">Register a new trainer in the system</p>
+          <p className="text-sm sm:text-base text-slate-400 sm:ml-15 mt-2">Register a new trainer in the system</p>
         </div>
 
         {/* Form Card */}
