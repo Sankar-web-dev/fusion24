@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
 interface MemberFormProps {
-  initialData?: Members;
+  initialData?: Members & { payments?: any[] };
   onSubmit: (data: any) => void;
   isLoading?: boolean;
   membershipsLoading?: boolean;
@@ -49,6 +49,17 @@ export function MemberForm({ initialData, onSubmit, isLoading }: MemberFormProps
           trainer_id: initialData.trainer_id || '',
           joined_date: initialData.joined_date 
             ? new Date(initialData.joined_date).toISOString().split('T')[0] 
+            : '',
+          payment_status: initialData.payments?.[0]?.status || 'unpaid',
+          payment_amount: initialData.payments?.[0]?.amount || 0,
+          billing_start: initialData.payments?.[0]?.billing_start 
+            ? new Date(initialData.payments?.[0].billing_start).toISOString().split('T')[0] 
+            : '',
+          billing_end: initialData.payments?.[0]?.billing_end 
+            ? new Date(initialData.payments?.[0].billing_end).toISOString().split('T')[0] 
+            : '',
+          paid_date: initialData.payments?.[0]?.paid_date 
+            ? new Date(initialData.payments?.[0].paid_date).toISOString().split('T')[0] 
             : '',
         }
       : {

@@ -3,9 +3,9 @@ import { z } from 'zod';
 export const memberSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
   email: z.string().email('Invalid email address'),
-  password: z.string(), // Password is now static
+  password: z.string().optional(), // Password can be optional in form if handled by service
   phone: z.string().optional().nullable(),
-  membership_plan_id: z.string().optional().nullable(),
+  membership_plan_id: z.string().min(1, 'Membership plan is required'),
   trainer_id: z.string().optional().nullable(),
   joined_date: z.string().optional().nullable(),
   // Payment fields
@@ -59,6 +59,12 @@ export const memberUpdateSchema = z.object({
   membership_plan_id: z.string().optional().nullable(),
   trainer_id: z.string().optional().nullable(),
   joined_date: z.string().optional().nullable(),
+  // For update, we might also want to include payment fields if they are updated in the same form
+  payment_status: z.enum(['paid', 'partial', 'unpaid']).optional(),
+  payment_amount: z.coerce.number().min(0).optional(),
+  billing_start: z.string().optional(),
+  billing_end: z.string().optional(),
+  paid_date: z.string().optional(),
 });
 
 export type MemberFormData = z.infer<typeof memberSchema>;
