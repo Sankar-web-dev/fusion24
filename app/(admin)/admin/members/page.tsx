@@ -22,6 +22,7 @@ import { supabase } from '@/lib/supabase';
 import { MembershipPlans, Trainers } from '@/schema';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -30,6 +31,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { deleteMemberAction } from './_actions/member-actions';
 
 const outfit = Outfit({ subsets: ['latin'] });
 
@@ -79,8 +81,19 @@ export default function MembersPage() {
     fetchData();
   }, []);
 
-  const handleDelete = (id: string) => {
-    deleteMutation.mutate(id);
+  const handleDelete = async (id: string) => {
+    try {
+      const result = await deleteMemberAction(id);
+      if (result.success) {
+        toast.success('Member deleted successfully');
+        // Refresh the members list
+        window.location.reload();
+      } else {
+        toast.error(result.error || 'Failed to delete member');
+      }
+    } catch (error) {
+      toast.error('An unexpected error occurred');
+    }
   };
 
   const filteredMembers = members?.filter(member => 
@@ -260,7 +273,10 @@ export default function MembersPage() {
                             <AlertDialogFooter className="mt-6 flex gap-3">
                               <AlertDialogCancel className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700 rounded-xl h-11 flex-1">Cancel</AlertDialogCancel>
                               <AlertDialogAction 
-                                onClick={() => handleDelete(member.id)} 
+                                onClick={async (e) => {
+                                  e.preventDefault();
+                                  await handleDelete(member.id);
+                                }} 
                                 className="bg-red-600 text-white hover:bg-red-700 border-0 rounded-xl h-11 flex-1 font-bold"
                               >
                                 Delete

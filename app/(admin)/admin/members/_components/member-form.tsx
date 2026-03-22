@@ -23,11 +23,14 @@ interface MemberFormProps {
 export function MemberForm({ initialData, onSubmit, isLoading }: MemberFormProps) {
   const { data: memberships } = useGetMemberships();
   const [trainers, setTrainers] = useState<Trainers[]>([]);
+  const [trainersLoading, setTrainersLoading] = useState(true);
 
   useEffect(() => {
     const fetchTrainers = async () => {
+      setTrainersLoading(true);
       const { data } = await supabase.from('trainers').select('*').order('name');
       if (data) setTrainers(data);
+      setTrainersLoading(false);
     };
     fetchTrainers();
   }, []);
@@ -78,8 +81,19 @@ export function MemberForm({ initialData, onSubmit, isLoading }: MemberFormProps
         },
   });
 
+  // Update form values when trainers are loaded and we have initial data
+  useEffect(() => {
+    if (initialData && !trainersLoading && trainers.length > 0) {
+      setValue('trainer_id', initialData.trainer_id || '');
+    }
+  }, [initialData, trainersLoading, trainers, setValue]);
+
   const selectedMembershipPlanId = watch('membership_plan_id');
-  const selectedMembershipPlan = memberships?.find(plan => plan.id === selectedMembershipPlanId);
+  const selectedMembershipPlan = memberships?.find(plan => plan.id === selectedMembershipPlanId) || 
+    (initialData?.membership_plan_id ? memberships?.find(plan => plan.id === initialData.membership_plan_id) : undefined);
+  const selectedTrainerId = watch('trainer_id');
+  const selectedTrainer = trainers?.find(trainer => trainer.id === selectedTrainerId) ||
+    (initialData?.trainer_id ? trainers?.find(trainer => trainer.id === initialData.trainer_id) : undefined);
   const billingStart = watch('billing_start');
   const paymentStatus = watch('payment_status');
 
@@ -220,9 +234,12 @@ export function MemberForm({ initialData, onSubmit, isLoading }: MemberFormProps
             id="trainer_id"
             {...register('trainer_id')}
             className="w-full bg-slate-950/60 border border-slate-700/50 text-slate-200 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 rounded-xl h-12 px-3"
+            disabled={trainersLoading}
           >
-            <option value="">Select a trainer (optional)</option>
-            {trainers?.map((trainer) => (
+            <option value="">
+              {trainersLoading ? 'Loading trainers...' : 'Select a trainer (optional)'}
+            </option>
+            {!trainersLoading && trainers?.map((trainer) => (
               <option key={trainer.id} value={trainer.id}>
                 {trainer.name} {trainer.specialization ? `- ${trainer.specialization}` : ''}
               </option>
@@ -234,27 +251,42 @@ export function MemberForm({ initialData, onSubmit, isLoading }: MemberFormProps
         </div>
       </div>
 
-      {/* Payment Status - Always show */}
-      <div className="space-y-2">
-        <Label htmlFor="payment_status" className="text-slate-300 font-medium ml-1">
-          Payment Status
-        </Label>
-        <select
-          id="payment_status"
-          {...register('payment_status')}
-          className="w-full bg-slate-950/60 border border-slate-700/50 text-slate-200 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 rounded-xl h-12 px-3"
-        >
-          <option value="unpaid">Unpaid</option>
-          <option value="partial">Partial</option>
-          <option value="paid">Paid</option>
-        </select>
-        {(errors as FieldErrors<MemberFormData>).payment_status && (
-          <p className="text-sm text-red-400 ml-1">{(errors as FieldErrors<MemberFormData>).payment_status?.message}</p>
-        )}
-      </div>
+      {/* Payment Status - Show only for new members */}
+      {!initialData && (
+        <div className="space-y-2">
+          <Label htmlFor="payment_status" className="text-slate-300 font-medium ml-1">
+            Payment Status
+          </Label>
+          <select
+            id="payment_status"
+            {...register('payment_status')}
+            className="w-full bg-slate-950/60 border border-slate-700/50 text-slate-200 focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:border-orange-500 rounded-xl h-12 px-3"
+          >
+            <option value="unpaid">Unpaid</option>
+            <option value="partial">Partial</option>
+            <option value="paid">Paid</option>
+          </select>
+          {(errors as FieldErrors<MemberFormData>).payment_status && (
+            <p className="text-sm text-red-400 ml-1">{(errors as FieldErrors<MemberFormData>).payment_status?.message}</p>
+          )}
+        </div>
+      )}
 
-      {/* Payment Details - Show only when payment status is partial or paid and membership plan is selected */}
-      {selectedMembershipPlan && paymentStatus !== 'unpaid' && (
+      {/* Show current payment status for existing members (read-only) */}
+      {initialData && (
+        <div className="space-y-2">
+          <Label className="text-slate-300 font-medium ml-1">
+            Current Payment Status
+          </Label>
+          <div className="w-full bg-slate-950/60 border border-slate-700/50 text-slate-200 rounded-xl h-12 px-3 flex items-center">
+            <span className="capitalize">{initialData.payments?.[0]?.status || 'unpaid'}</span>
+          </div>
+          <p className="text-xs text-slate-500 ml-1">Payment status cannot be edited here</p>
+        </div>
+      )}
+
+      {/* Payment Details - Show only for new members when payment status is partial or paid and membership plan is selected */}
+      {!initialData && selectedMembershipPlan && paymentStatus !== 'unpaid' && (
         <div className="space-y-6 p-6 bg-slate-900/50 border border-slate-700/50 rounded-2xl">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-8 h-8 bg-orange-500/10 rounded-lg flex items-center justify-center">

@@ -25,7 +25,7 @@ export default function Login() {
     loginMutation.mutate({ email, password }, {
       onSuccess: (data) => {
         toast.success('Welcome back!');
-        const role = data?.user?.user_metadata?.role;
+        const role = data?.user?.user_metadata?.role || data?.user?.app_metadata?.role;
         if (role === 'admin') {
           router.push('/admin');
         } else if (role === 'member') {

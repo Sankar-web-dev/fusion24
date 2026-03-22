@@ -116,37 +116,72 @@ export class MemberService {
     if (error) throw error;
 
     // Update payment details if payment status is provided
-    if (member.payment_status && member.membership_plan_id) {
-      const { data: planData } = await supabase
-        .from('membership_plans')
-        .select('price')
-        .eq('id', member.membership_plan_id)
-        .single();
+    if (member.payment_status) {
+      // Get the membership plan - either from the update or existing member data
+      const planId = member.membership_plan_id || memberData.membership_plan_id;
       
-      const planPrice = planData?.price || 0;
+      if (planId) {
+        const { data: planData } = await supabase
+          .from('membership_plans')
+          .select('price')
+          .eq('id', planId)
+          .single();
+        
+        const planPrice = planData?.price || 0;
 
-      const paymentPayload = {
-        member_id: id,
-        membership_plan_id: member.membership_plan_id,
-        amount: planPrice,
-        paid_amount:
-          member.payment_status === 'paid'
-            ? planPrice
-            : member.payment_status === 'partial'
-            ? member.payment_amount || 0
-            : 0,
-        billing_start: member.billing_start ? new Date(member.billing_start).toISOString() : null,
-        billing_end: member.billing_end ? new Date(member.billing_end).toISOString() : null,
-        status: member.payment_status,
-        paid_date: member.paid_date ? new Date(member.paid_date).toISOString() : null,
-      };
+        if (member.payment_status === 'unpaid') {
+          // For unpaid status, delete the payment record
+          const { error: deleteError } = await supabase
+            .from('payments')
+            .delete()
+            .eq('member_id', id);
+          
+          if (deleteError) {
+            console.warn('Failed to delete payment record:', deleteError);
+          }
+        } else {
+          // For paid/partial status, create or update payment record
+          const paymentPayload = {
+            member_id: id,
+            membership_plan_id: planId,
+            amount: planPrice,
+            paid_amount:
+              member.payment_status === 'paid'
+                ? planPrice
+                : member.payment_amount || 0,
+            billing_start: member.billing_start ? new Date(member.billing_start).toISOString() : new Date().toISOString(),
+            billing_end: member.billing_end ? new Date(member.billing_end).toISOString() : new Date().toISOString(),
+            status: member.payment_status,
+            paid_date: member.paid_date ? new Date(member.paid_date).toISOString() : new Date().toISOString(),
+          };
 
-      const { error: paymentError } = await supabase
-        .from('payments')
-        .upsert(paymentPayload, { onConflict: 'member_id' });
+          // Check if payment record exists
+          const { data: existingPayment } = await supabase
+            .from('payments')
+            .select('id')
+            .eq('member_id', id)
+            .single();
 
-      if (paymentError) {
-        console.warn('Failed to update payment record:', paymentError);
+          let paymentError;
+          if (existingPayment) {
+            // Update existing payment
+            const result = await supabase
+              .from('payments')
+              .update(paymentPayload)
+              .eq('member_id', id);
+            paymentError = result.error;
+          } else {
+            // Insert new payment
+            const result = await supabase
+              .from('payments')
+              .insert(paymentPayload);
+            paymentError = result.error;
+          }
+
+          if (paymentError) {
+            console.warn('Failed to update payment record:', paymentError);
+          }
+        }
       }
     }
 
@@ -173,7 +208,7 @@ export class MemberService {
         } else {
           console.log('Auth user deleted successfully:', member.auth_user_id);
         }
-      } catch (authError) {
+      } catch (authError: any) {
         console.error('Exception during auth user deletion:', authError);
         // Don't throw error here - member deletion succeeded
       }
