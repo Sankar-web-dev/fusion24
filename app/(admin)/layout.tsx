@@ -25,7 +25,9 @@ export default function AdminLayout({
             <Link href="/admin/trainers" className="hover:text-orange-400 cursor-pointer">Trainers</Link>
             <Link href="/admin/payments" className="hover:text-orange-400 cursor-pointer">Payments</Link>
             <Link href="/admin/workout-plans" className="hover:text-orange-400 cursor-pointer">Workout Plans</Link>
+            <Link href="/admin/member-workout-plans" className="hover:text-orange-400 cursor-pointer">Member Workout Plans</Link>
             <Link href="/admin/diet-plans" className="hover:text-orange-400 cursor-pointer">Diet Plans</Link>
+            <Link href="/admin/member-diet-plans" className="hover:text-orange-400 cursor-pointer">Member Diet Plans</Link>
           </nav>
         </aside>
 
