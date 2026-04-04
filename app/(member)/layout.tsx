@@ -1,18 +1,39 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
 export default function MemberLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
+  const navItems = [
+    { href: '/member', label: 'Dashboard' },
+    { href: '/member/workouts', label: 'My Workout' },
+    { href: '/member/diet', label: 'My Diet' },
+    { href: '/member/calories', label: 'Calories' },
+  ];
+
   return (
     <div className="flex h-screen w-full bg-[#0A1118] text-white overflow-hidden">
-      {/* Sidebar Placeholder */}
+      {/* Sidebar */}
       <aside className="w-64 border-r border-slate-800 bg-slate-900/50 p-6 flex flex-col hidden md:flex">
         <h2 className="text-xl font-bold text-orange-500 mb-8">Fusion24 Member</h2>
         <nav className="flex flex-col gap-4 text-sm text-slate-300">
-          <div className="hover:text-orange-400 cursor-pointer">Dashboard</div>
-          <div className="hover:text-orange-400 cursor-pointer">My Workout</div>
-          <div className="hover:text-orange-400 cursor-pointer">My Diet</div>
-          <div className="hover:text-orange-400 cursor-pointer">Calories</div>
+          {navItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`hover:text-orange-400 cursor-pointer transition-colors ${
+                pathname === item.href ? 'text-orange-400 font-medium' : ''
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
       </aside>
 
