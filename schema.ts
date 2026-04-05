@@ -17,6 +17,8 @@ export interface CalorieLogs {
   item_name: string;
   quantity: number | null;
   calories: number;
+  sets: number | null;
+  reps: number | null;
   created_at: Date | null;
 }
 

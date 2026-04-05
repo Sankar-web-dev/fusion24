@@ -14,7 +14,7 @@ export default function MemberLayout({
     { href: '/member', label: 'Dashboard' },
     { href: '/member/workouts', label: 'My Workout' },
     { href: '/member/diet', label: 'My Diet' },
-    { href: '/member/calories', label: 'Calories' },
+    { href: '/member/calorie-tracker', label: 'Calorie Tracker' },
   ];
 
   return (
