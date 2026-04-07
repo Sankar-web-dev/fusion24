@@ -154,6 +154,11 @@ export default function MembersPage() {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+            <Link href="/admin/members/import">
+              <Button variant="outline" className="h-11 px-6 rounded-xl border-slate-700 bg-slate-800/50 hover:bg-slate-700 hover:text-white transition-colors">
+                Import Members
+              </Button>
+            </Link>
             <Link href="/admin/members/create">
               <Button className="h-11 px-6 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)] hover:shadow-[0_0_25px_rgba(249,115,22,0.5)] border-0">
                 <Plus className="mr-2 h-5 w-5" />
